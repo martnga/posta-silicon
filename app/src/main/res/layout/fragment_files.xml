@@ -1,0 +1,154 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Files">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+       <!-- <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/store_files_txt"
+            android:textAlignment="center"
+            android:textColor="@color/redTxtHeading"
+            android:layout_marginBottom="@dimen/pad_10dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="@dimen/txt_20sp"/>-->
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                card_view:cardElevation="6dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardBackgroundColor="#FFFFFF">
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical"
+                       android:paddingLeft="20dp">
+
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:textSize="18dp"
+                           android:textStyle="bold"
+                           android:textColor="#696969"
+                           android:paddingBottom="10dp"
+                           android:paddingTop="10dp"
+                           android:text="Use your eBox"/>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="horizontal">
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:text="."
+                               android:gravity="center_vertical"
+                               android:paddingBottom="10dp"
+                               android:paddingTop="10dp"
+                               android:textSize="15dp"/>
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:text="to protect your documents"
+                               android:paddingBottom="10dp"
+                               android:paddingTop="10dp"
+                               android:textSize="15dp"/>
+                       </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="."
+                                android:gravity="center_vertical"
+                                android:paddingBottom="10dp"
+                                android:paddingTop="10dp"
+                                android:textSize="15dp"/>
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:text="as a searchable personal storage solution"
+                                   android:paddingBottom="10dp"
+                                   android:paddingTop="10dp"
+                                   android:textSize="15dp"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="."
+                                    android:gravity="center_vertical"
+                                    android:paddingBottom="10dp"
+                                    android:paddingTop="10dp"
+                                    android:textSize="15dp"/>
+                                   <TextView
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:text="to access your files anytime, from any device"
+                                       android:paddingBottom="10dp"
+                                       android:paddingTop="10dp"
+                                       android:textSize="15dp"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="."
+                                        android:gravity="center_vertical"
+                                        android:paddingBottom="10dp"
+                                        android:paddingTop="10dp"
+                                        android:textSize="15dp"/>
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:paddingBottom="10dp"
+                                        android:paddingTop="10dp"
+                                        android:text="to send files"
+                                        android:textSize="15dp"/>
+                                    </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/pad_25dp"
+                            android:layout_marginBottom="@dimen/pad_10dp"
+                            android:gravity="center">
+                               <TextView
+                                   android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:id="@+id/AddFile"
+                                   android:text="+ Add a file"
+                                   android:textStyle="bold"
+                                   android:textColor="#FFFFFF"
+                                   android:background="@drawable/button"
+                                   android:paddingLeft="15dp"
+                                   android:paddingRight="15dp"
+                                   android:paddingBottom="7dp"
+                                   android:textSize="18dp"
+                                   android:paddingTop="7dp"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+            </android.support.v7.widget.CardView>
+    </LinearLayout>
+</FrameLayout>

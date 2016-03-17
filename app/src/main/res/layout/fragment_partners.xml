@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".Fragments.Partners">
+
+
+<include layout="@layout/content_partners"/>
+
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/moreProviderFab"
+    app:rippleColor="@color/redTxtHeading"
+    app:backgroundTint="@color/redTxtHeading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="@dimen/fab_margin"
+    android:src="@drawable/ic_add_white_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>
+
+    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Fragments.Partners">
+
+        &lt;!&ndash;<TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_provider_txt"
+            android:textAlignment="center"
+            android:textColor="@color/redTxtHeading"
+            android:layout_marginBottom="@dimen/pad_10dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="@dimen/txt_20sp"/>
+    &ndash;&gt;
+
+        &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/moreProvider"
+                    android:text="More Providers"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="7dp"
+                    android:textSize="18dp"
+                    android:paddingTop="7dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>-->

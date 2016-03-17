@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.craft.PostaEbox">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:name=".App"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+
+        <activity android:name=".CustomActivity.RootActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CustomActivity.MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CustomActivity.SignUp"
+            android:label="@string/title_activity_sign_up"
+            android:parentActivityName=".CustomActivity.RootActivity" />
+        <activity
+            android:name=".CustomActivity.Login"
+            android:label="Login"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CustomActivity.Partners_Services"
+            android:label="@string/title_activity_partners__services"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".CustomActivity.MainActivity"></activity>
+    </application>
+
+</manifest>
