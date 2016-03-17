@@ -24,10 +24,9 @@ import org.ksoap2.transport.HttpTransportSE;
 
 public class SignUp extends AppCompatActivity {
 
-    String Country = "KE";
+    String Country = "kenyatest";
     String TAG = "SignUp_Class Response";
-    SoapPrimitive resultString;
-    String email, mobileNumber,postalNumber, postalAddress, password;
+    String email, mobileNumber, postalAddress, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class SignUp extends AppCompatActivity {
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidEmail(mEmail.getText())) {
+                if (mEmail.getText().toString().isEmpty()) {
                     mEmail.setError("Email required");
                 } else if (mPassword.getText().toString().isEmpty()) {
                     mPassword.setError("Password required");
@@ -96,7 +95,7 @@ public class SignUp extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            Toast.makeText(SignUp.this, "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(SignUp.this, "Response" + App.getInstance().customerId.toString(), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -125,9 +124,9 @@ public class SignUp extends AppCompatActivity {
             HttpTransportSE transport = new HttpTransportSE(URL);
 
             transport.call(SOAP_ACTION, soapEnvelope);
-            resultString = (SoapPrimitive) soapEnvelope.getResponse();
+            App.getInstance().customerId = (SoapPrimitive) soapEnvelope.getResponse();
 
-            Log.i(TAG, "Login response: " + resultString);
+            Log.i(TAG, "Login response: " + App.getInstance().customerId);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }

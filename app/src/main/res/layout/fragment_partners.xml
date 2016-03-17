@@ -1,34 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".Fragments.Partners">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context=".Fragments.Partners">
 
-
-<include layout="@layout/content_partners"/>
-
-<android.support.design.widget.FloatingActionButton
-    android:id="@+id/moreProviderFab"
-    app:rippleColor="@color/redTxtHeading"
-    app:backgroundTint="@color/redTxtHeading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_add_white_24dp"/>
-
-</android.support.design.widget.CoordinatorLayout>
-
-    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Fragments.Partners">
-
-        &lt;!&ndash;<TextView
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_provider_txt"
@@ -37,9 +15,9 @@ tools:context=".Fragments.Partners">
             android:layout_marginBottom="@dimen/pad_10dp"
             android:fontFamily="sans-serif-light"
             android:textSize="@dimen/txt_20sp"/>
-    &ndash;&gt;
+    -->
 
-        &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;
+        <!-- TODO: Update blank fragment layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,12 +25,18 @@ tools:context=".Fragments.Partners">
             android:orientation="vertical">
 
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/card_recycler_view"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:gravity="center">
+                android:gravity="center_horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,4 +52,28 @@ tools:context=".Fragments.Partners">
                     android:paddingTop="7dp"/>
             </LinearLayout>
         </LinearLayout>
-    </FrameLayout>-->
+    </FrameLayout>
+
+
+    <!--<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Partners">
+
+
+    <include layout="@layout/content_partners"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/moreProviderFab"
+        app:rippleColor="@color/redTxtHeading"
+        app:backgroundTint="@color/redTxtHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_white_24dp"/>
+
+    </android.support.design.widget.CoordinatorLayout>-->

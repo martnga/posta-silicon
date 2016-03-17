@@ -1,47 +1,50 @@
 package com.craft.PostaEbox.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.Utils.PartnersDataAdapter;
 import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.models.PartnersModel;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 
 public class Partners extends Fragment {
 
-    FloatingActionButton moreProviderFab;
+    TextView moreProvider;
+    String TAG = "Partners_Class Response";
+
     private final String android_version_names[] = {
             "Donut",
             "Eclair",
             "Froyo",
-            "Gingerbread",
-            "Honeycomb",
-            "Ice Cream Sandwich",
-            "Jelly Bean",
-            "KitKat",
-            "Lollipop",
-            "Marshmallow"
+            "Gingerbread"
     };
+
 
     private final String android_image_urls[] = {
             "http://api.learn2crack.com/android/images/donut.png",
             "http://api.learn2crack.com/android/images/eclair.png",
             "http://api.learn2crack.com/android/images/froyo.png",
-            "http://api.learn2crack.com/android/images/ginger.png",
-            "http://api.learn2crack.com/android/images/honey.png",
-            "http://api.learn2crack.com/android/images/icecream.png",
-            "http://api.learn2crack.com/android/images/jellybean.png",
-            "http://api.learn2crack.com/android/images/kitkat.png",
-            "http://api.learn2crack.com/android/images/lollipop.png",
-            "http://api.learn2crack.com/android/images/marshmallow.png"
+            "http://api.learn2crack.com/android/images/ginger.png"
+
     };
 
     @Override
@@ -49,7 +52,7 @@ public class Partners extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView=inflater.inflate(R.layout.fragment_partners, container, false);
-        moreProviderFab =(FloatingActionButton) rootView.findViewById(R.id.moreProviderFab);
+        moreProvider =(TextView) rootView.findViewById(R.id.moreProvider);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.card_recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
@@ -61,11 +64,6 @@ public class Partners extends Fragment {
         return rootView;
     }
 
-
-    private void initViews(){
-
-
-    }
     private ArrayList<PartnersModel> prepareData(){
 
         ArrayList<PartnersModel> partnersModelArrayList = new ArrayList<>();
@@ -76,5 +74,57 @@ public class Partners extends Fragment {
             partnersModelArrayList .add(partnersModel);
         }
         return partnersModelArrayList;
+    }
+
+
+    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            Log.i(TAG, "onPreExecute");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.i(TAG, "doInBackground");
+            login();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.i(TAG, "onPostExecute");
+            Toast.makeText(getActivity(), "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
+    public void login() {
+        String SOAP_ACTION = "http://tempuri.org/LogIn";
+        String METHOD_NAME = "LogIn";
+        String NAMESPACE = "http://tempuri.org/";
+        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=LogIn";
+
+        try {
+            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+            Request.addProperty("CustomerID", mCustomerID);
+            Request.addProperty("IMEINumber", getIMEI());
+            Request.addProperty("APPName", App.getInstance().APP_NAME);
+            Request.addProperty("Password", mPassword);
+
+            SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            soapEnvelope.dotNet = true;
+            soapEnvelope.setOutputSoapObject(Request);
+
+            HttpTransportSE transport = new HttpTransportSE(URL);
+
+            transport.call(SOAP_ACTION, soapEnvelope);
+            resultString = (SoapPrimitive) soapEnvelope.getResponse();
+
+            Log.i(TAG, "Login response: " + resultString);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error: " + ex.getMessage());
+        }
     }
 }

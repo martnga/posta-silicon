@@ -2,23 +2,33 @@ package com.craft.PostaEbox.CustomActivity;
 
 
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.Fragments.Home;
 import com.craft.PostaEbox.Fragments.Providers;
 import com.craft.PostaEbox.Fragments.eBox;
 import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.Utils.DrawerAdapter;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
