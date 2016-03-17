@@ -30,6 +30,7 @@ public class Partners extends Fragment {
 
     TextView moreProvider;
     String TAG = "Partners_Class Response";
+    SoapPrimitive resultString;
 
     private final String android_version_names[] = {
             "Donut",
@@ -101,17 +102,14 @@ public class Partners extends Fragment {
 
 
     public void login() {
-        String SOAP_ACTION = "http://tempuri.org/LogIn";
-        String METHOD_NAME = "LogIn";
+        String SOAP_ACTION = "http://tempuri.org/GetListOfPartners";
+        String METHOD_NAME = "GetListOfPartners";
         String NAMESPACE = "http://tempuri.org/";
-        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=LogIn";
+        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=GetListOfPartners";
 
         try {
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            Request.addProperty("CustomerID", mCustomerID);
-            Request.addProperty("IMEINumber", getIMEI());
-            Request.addProperty("APPName", App.getInstance().APP_NAME);
-            Request.addProperty("Password", mPassword);
+            Request.addProperty("TypeOfPartner", "utility");
 
             SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             soapEnvelope.dotNet = true;

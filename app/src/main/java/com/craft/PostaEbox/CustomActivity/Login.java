@@ -94,10 +94,9 @@ public class Login extends AppCompatActivity {
         String METHOD_NAME = "LogIn";
         String NAMESPACE = "http://tempuri.org/";
         String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=LogIn";
-
         try {
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            Request.addProperty("CustomerID", mCustomerID);
+            Request.addProperty("CustomerID", App.getInstance().customerId);
             Request.addProperty("IMEINumber", getIMEI());
             Request.addProperty("APPName", App.getInstance().APP_NAME);
             Request.addProperty("Password", mPassword);
