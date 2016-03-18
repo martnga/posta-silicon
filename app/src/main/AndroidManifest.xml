@@ -39,6 +39,11 @@
             android:name=".CustomActivity.Login"
             android:label="Login"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".GCMConfig.GCMRegistration"
+            android:label="Login"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CustomActivity.Partners_Services"
             android:label="@string/title_activity_partners__services"

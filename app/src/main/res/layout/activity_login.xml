@@ -47,8 +47,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:inputType="textAutoComplete"
-                            android:id="@+id/customer_id"
-                            android:hint="Customer ID" />
+                            android:id="@+id/phone_number"
+                            android:hint="Phone Number" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

@@ -1,6 +1,7 @@
 package com.craft.PostaEbox.CustomActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.craft.PostaEbox.App;
+import com.craft.PostaEbox.GCMConfig.GCMRegistration;
 import com.craft.PostaEbox.R;
 
 import org.ksoap2.SoapEnvelope;
@@ -67,12 +69,10 @@ public class SignUp extends AppCompatActivity {
                     postalAddress = mPostalAddress.getText().toString().trim();
                     password = mPassword.getText().toString().trim();
 
+
                     AsyncCallWS task = new AsyncCallWS();
                     task.execute();
 
-                    Intent intent = new Intent(SignUp.this, MainActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                 }
             }
         });
@@ -96,6 +96,18 @@ public class SignUp extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
             Toast.makeText(SignUp.this, "Response" + App.getInstance().customerId.toString(), Toast.LENGTH_LONG).show();
+
+            //saving credentials in shared preferences
+            SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("email", email);
+            editor.putString("mobile", mobileNumber);
+            editor.putString("customerID", App.getInstance().customerId.toString());
+            editor.commit();
+
+            Intent intent = new Intent(SignUp.this, GCMRegistration.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
         }
 
     }

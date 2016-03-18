@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.craft.PostaEbox.CustomActivity.MainActivity;
+import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.Utils.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -37,14 +40,14 @@ public class GCMRegistration extends Activity {
  
     public static final String REG_ID = "regId";
     public static final String EMAIL_ID = "eMailId";
-    public static final String PHONE_ID = "phoneId";
+    public static final String PHONE_NUMBER = "mobile";
     
     String possibleEmail,userphone,name,customerid,account;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_gcm_registration);
         
        try{
         //possibleEmail += "************* Get Registered Gmail Account *************nn";
@@ -70,9 +73,10 @@ public class GCMRegistration extends Activity {
         prgDialog.setMessage("Please wait...");
         prgDialog.setCancelable(false);
  
-        SharedPreferences prefs = getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
         String registrationId = prefs.getString(REG_ID, "");
- 
+        userphone = prefs.getString(PHONE_NUMBER, "");
+
         //When Email ID is set in Sharedpref, User will be taken to HomeActivity
         if (!TextUtils.isEmpty(registrationId)) {
             /*Intent i = new Intent(applicationContext, HomeActivity.class);
@@ -168,7 +172,11 @@ public class GCMRegistration extends Activity {
                         prgDialog.hide();
                         if (prgDialog != null) {
                             prgDialog.dismiss();
+
                             //transition
+                            Intent intent = new Intent(GCMRegistration.this, MainActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
 
                         }
