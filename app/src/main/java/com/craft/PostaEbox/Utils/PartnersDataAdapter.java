@@ -12,8 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.craft.PostaEbox.R;
-import com.craft.PostaEbox.models.PartnersModel;
-import com.squareup.picasso.Picasso;
+import com.craft.PostaEbox.model.PartnersModel;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,7 @@ public class PartnersDataAdapter extends RecyclerView.Adapter<PartnersDataAdapte
     public void onBindViewHolder(PartnersDataAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tv_partner_name.setText(partners.get(i).getPartnerName());
-        Picasso.with(context).load(partners.get(i).getPartner_image_url()).resize(240, 120).into(viewHolder.img_android);
+        //Picasso.with(context).load(partners.get(i).getPartner_image_url()).resize(240, 120).into(viewHolder.img_android);
     }
 
     @Override
@@ -51,7 +50,7 @@ public class PartnersDataAdapter extends RecyclerView.Adapter<PartnersDataAdapte
             super(view);
 
             tv_partner_name = (TextView)view.findViewById(R.id.tv_partner_name);
-            img_android = (ImageView) view.findViewById(R.id.img_android);
+            //img_android = (ImageView) view.findViewById(R.id.img_android);
         }
     }
 

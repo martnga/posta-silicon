@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.craft.PostaEbox">
 
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.craft.PostaEbox.permission.C2D_MESSAGE"
+                android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -39,6 +44,20 @@
             android:label="@string/title_activity_partners__services"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".CustomActivity.MainActivity"></activity>
+
+        <receiver
+            android:name="com.craft.PostaEbox.GCMConfig.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.craft.PostaEbox" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.craft.PostaEbox.GCMConfig.GCMNotificationIntentService" android:enabled="true"/>
+
     </application>
+
+
+
 
 </manifest>

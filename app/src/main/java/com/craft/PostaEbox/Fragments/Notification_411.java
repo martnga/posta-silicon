@@ -28,4 +28,6 @@ public class Notification_411 extends Fragment {
         List_Notification_411.setAdapter(adapter);
         return rootView;
     }
+
+
 }
