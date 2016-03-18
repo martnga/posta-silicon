@@ -22,7 +22,8 @@ public class Partners_Services extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar_layout=(CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         Bundle bundle = getIntent().getExtras();
-        toolbar_layout.setBackground(getResources().getDrawable(bundle.getInt("Partner_Logo")));
+       // toolbar_layout.setBackground(getResources().getDrawable(bundle.getInt("Partner_Logo")));
+        toolbar_layout.setTitle(bundle.getString("title"));
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

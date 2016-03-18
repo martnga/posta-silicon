@@ -1,5 +1,6 @@
 package com.craft.PostaEbox.Fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.craft.PostaEbox.CustomActivity.Partners_Services;
+import com.craft.PostaEbox.Utils.ItemClickSupport;
 import com.craft.PostaEbox.Utils.PartnersDataAdapter;
 import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.Utils.XMLParser;
@@ -63,9 +66,23 @@ public class Partners extends Fragment {
         PartnersDataAdapter adapter = new PartnersDataAdapter(getContext(),partners);
         recyclerView.setAdapter(adapter);
 
+        //Click Listener
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // do it
+                Bundle b = new Bundle();
+                b.putString("title", menuItems.get(position).get(KEY_PARTNER_NAME));
+                Intent i = new Intent(getActivity(), Partners_Services.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
 
         return rootView;
     }
+
+
 
     private ArrayList<PartnersModel> prepareData(){
 
