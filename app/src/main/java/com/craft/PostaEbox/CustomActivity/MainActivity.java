@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +24,20 @@ import com.craft.PostaEbox.Fragments.Providers;
 import com.craft.PostaEbox.Fragments.eBox;
 import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.Utils.DrawerAdapter;
+import com.craft.PostaEbox.Utils.XMLParser;
+import com.craft.PostaEbox.model.PartnersModel;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
@@ -30,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
     DrawerAdapter mAdapter;
     String userphone;
     public static final String PHONE_NUMBER = "mobile";
+    SoapPrimitive resultString;
+    String TAG = "MainActivity_Class Response";
+
+    public static ArrayList<HashMap<String, String>> partnersMenuItems;
+    // XML node keys
+    static final String KEY_PARTNER = "Partner"; // parent node
+    static final String KEY_PARTNER_ID = "PartnerID";
+    static final String KEY_PARTNER_NAME = "PartnerName";
+    static final String KEY_ACCOUNT_QUERY = "AccountQuery";
+
 
     private ActionBarDrawerToggle mDrawerToggle;
     String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Settings","LogOut"};
@@ -67,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
                 displayView(position);
             }
         });
+
+        partnersMenuItems = new ArrayList<HashMap<String, String>>();
+        //Fetching Partners
+        //Intiate XML fetching
+        AsyncCallWS task = new AsyncCallWS();
+        task.execute();
+
     }
 
     private void addDrawerItems() {
@@ -144,6 +177,80 @@ public class MainActivity extends AppCompatActivity {
             mDrawerList.setSelection(position);
             setTitle(DrawerMenu[position]);
             mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+
+
+
+
+    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            Log.i(TAG, "onPreExecute");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.i(TAG, "doInBackground");
+            fetchPartners();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.i(TAG, "onPostExecute");
+            // Toast.makeText(getActivity(), "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+
+            XMLParser parser = new XMLParser();
+            String xml = resultString.toString(); // getting XML
+            Document doc = parser.getDomElement(xml); // getting DOM element
+
+            NodeList nl = doc.getElementsByTagName(KEY_PARTNER);
+            // looping through all item nodes <item>
+
+            for (int i = 0; i < nl.getLength(); i++) {
+
+                // creating add items to HashMap
+                HashMap<String, String> map = new HashMap<String, String>();
+                Element e = (Element) nl.item(i);
+                // adding each child node to HashMap key => value
+                map.put(KEY_PARTNER_ID, parser.getValue(e, KEY_PARTNER_ID));
+                map.put(KEY_PARTNER_NAME, parser.getValue(e, KEY_PARTNER_NAME));
+                // map.put(KEY_ACCOUNT_QUERY, parser.getValue(e, KEY_ACCOUNT_QUERY));
+
+                // adding HashList to ArrayList
+                partnersMenuItems.add(map);
+            }
+
+
+        }
+
+    }
+
+
+    public void fetchPartners() {
+        String SOAP_ACTION = "http://tempuri.org/GetListOfPartners";
+        String METHOD_NAME = "GetListOfPartners";
+        String NAMESPACE = "http://tempuri.org/";
+        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=GetListOfPartners";
+
+        try {
+            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+            Request.addProperty("TypeOfPartner", "utility");
+
+            SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            soapEnvelope.dotNet = true;
+            soapEnvelope.setOutputSoapObject(Request);
+
+            HttpTransportSE transport = new HttpTransportSE(URL);
+
+            transport.call(SOAP_ACTION, soapEnvelope);
+            resultString = (SoapPrimitive) soapEnvelope.getResponse();
+
+            Log.i(TAG, "response: " + resultString);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error: " + ex.getMessage());
         }
     }
 

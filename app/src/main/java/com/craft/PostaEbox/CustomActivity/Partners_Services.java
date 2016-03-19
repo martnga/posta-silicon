@@ -57,9 +57,6 @@ public class Partners_Services extends AppCompatActivity {
 
         // toolbar_layout.setBackground(getResources().getDrawable(bundle.getInt("Partner_Logo")));
         toolbar_layout.setTitle(title);
-        //Fetching Seesion Key
-        AsyncCallWS task = new AsyncCallWS();
-        task.execute();
 
         mPayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +70,7 @@ public class Partners_Services extends AppCompatActivity {
                     account_id = mAccountID.getText().toString().trim();
                     paymentAmount = mAmountToPay.getText().toString().trim();
 
+                    //Make Payments.
                     AsyncCallWS task = new AsyncCallWS();
                     task.execute();
 
