@@ -77,6 +77,7 @@ public class GCMNotificationIntentService extends IntentService {
     }
 
     private void sendNotification(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.CustomActivity.Partners_Services;
 import com.craft.PostaEbox.Utils.ItemClickSupport;
 import com.craft.PostaEbox.Utils.PartnersDataAdapter;
@@ -38,7 +39,7 @@ public class Partners extends Fragment {
     String TAG = "Partners_Class Response";
     SoapPrimitive resultString;
 
-    ArrayList<HashMap<String, String>> menuItems = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> partnersMenuItems = new ArrayList<HashMap<String, String>>();
     // XML node keys
     static final String KEY_PARTNER = "Partner"; // parent node
     static final String KEY_PARTNER_ID = "PartnerID";
@@ -58,6 +59,7 @@ public class Partners extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
 
+        Toast.makeText(getActivity(), "Response" + App.getInstance().SessionId.toString(), Toast.LENGTH_LONG).show();
         //Intiate XML fetching
         AsyncCallWS task = new AsyncCallWS();
         task.execute();
@@ -72,7 +74,8 @@ public class Partners extends Fragment {
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 // do it
                 Bundle b = new Bundle();
-                b.putString("title", menuItems.get(position).get(KEY_PARTNER_NAME));
+                b.putString("title", partnersMenuItems.get(position).get(KEY_PARTNER_NAME));
+                b.putString("partnerID", partnersMenuItems.get(position).get(KEY_PARTNER_ID));
                 Intent i = new Intent(getActivity(), Partners_Services.class);
                 i.putExtras(b);
                 startActivity(i);
@@ -82,15 +85,21 @@ public class Partners extends Fragment {
         return rootView;
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Intiate parners fetching
+        AsyncCallWS task = new AsyncCallWS();
+        task.execute();
+    }
 
     private ArrayList<PartnersModel> prepareData(){
 
         ArrayList<PartnersModel> partnersModelArrayList = new ArrayList<>();
-        for(int i=0;i<menuItems.size();i++){
+        for(int i=0;i<partnersMenuItems.size();i++){
             PartnersModel partnersModel = new PartnersModel();
 
-            partnersModel.setPartner_name(menuItems.get(i).get(KEY_PARTNER_NAME));
+            partnersModel.setPartner_name(partnersMenuItems.get(i).get(KEY_PARTNER_NAME));
             //partnersModel.setPartner_image_url(android_image_urls[i]);
             partnersModelArrayList .add(partnersModel);
         }
@@ -130,12 +139,12 @@ public class Partners extends Fragment {
                 HashMap<String, String> map = new HashMap<String, String>();
                 Element e = (Element) nl.item(i);
                 // adding each child node to HashMap key => value
-               // map.put(KEY_PARTNER_ID, parser.getValue(e, KEY_PARTNER_ID));
+                map.put(KEY_PARTNER_ID, parser.getValue(e, KEY_PARTNER_ID));
                 map.put(KEY_PARTNER_NAME, parser.getValue(e, KEY_PARTNER_NAME));
                // map.put(KEY_ACCOUNT_QUERY, parser.getValue(e, KEY_ACCOUNT_QUERY));
 
                 // adding HashList to ArrayList
-                menuItems.add(map);
+                partnersMenuItems.add(map);
             }
 
 
@@ -163,7 +172,7 @@ public class Partners extends Fragment {
             transport.call(SOAP_ACTION, soapEnvelope);
             resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
-            Log.i(TAG, "Login response: " + resultString);
+            Log.i(TAG, "response: " + resultString);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }
@@ -171,35 +180,5 @@ public class Partners extends Fragment {
 
 
 
-   /* // Adding menuItems to ListView
-    ListAdapter adapter = new SimpleAdapter(this, menuItems,
-            R.layout.list_item,
-            new String[] { KEY_NAME, KEY_DESC, KEY_COST }, new int[] {
-            R.id.name, R.id.desciption, R.id.cost });
-
-    setListAdapter(adapter);
-
-    // selecting single ListView item
-    ListView lv = getListView();
-    // listening to single listitem click
-    lv.setOnItemClickListener(new OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view,
-        int position, long id) {
-            // getting values from selected ListItem
-            String name = ((TextView) view.findViewById(R.id.name)).getText().toString();
-            String cost = ((TextView) view.findViewById(R.id.cost)).getText().toString();
-            String description = ((TextView) view.findViewById(R.id.desciption)).getText().toString();
-
-            // Starting new intent
-            Intent in = new Intent(getApplicationContext(), SingleMenuItemActivity.class);
-            in.putExtra(KEY_NAME, name);
-            in.putExtra(KEY_COST, cost);
-            in.putExtra(KEY_DESC, description);
-            startActivity(in);
-
-        }
-    });*/
 }
 
