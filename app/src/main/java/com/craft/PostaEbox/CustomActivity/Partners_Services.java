@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.R;
@@ -28,6 +29,8 @@ public class Partners_Services extends AppCompatActivity {
     CollapsingToolbarLayout toolbar_layout;
     String TAG = "Partners_Services_Class Response";
     String userphone, account_id, paymentAmount, mPartnerID, title;
+    SoapObject response;
+
     public static final String PHONE_NUMBER = "mobile";
 
     @Override
@@ -105,7 +108,7 @@ public class Partners_Services extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            // Toast.makeText(getActivity(), "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(Partners_Services.this, "Response" + response.getName(), Toast.LENGTH_LONG).show();
 
 
         }
@@ -137,9 +140,9 @@ public class Partners_Services extends AppCompatActivity {
             HttpTransportSE transport = new HttpTransportSE(URL);
 
             transport.call(SOAP_ACTION, soapEnvelope);
-            SoapPrimitive response= (SoapPrimitive) soapEnvelope.getResponse();
+            response = (SoapObject) soapEnvelope.getResponse();
 
-            Log.i(TAG, "response: " + App.getInstance().SessionId);
+            Log.i(TAG, "response: " + response);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }

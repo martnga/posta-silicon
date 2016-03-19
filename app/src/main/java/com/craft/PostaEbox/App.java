@@ -10,7 +10,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 public class App extends Application {
     public  String APP_NAME = "eposta";
     public SoapPrimitive customerId;
-    public SoapPrimitive SessionId;
+    public String SessionId;
 
     private static App mInstance;
 

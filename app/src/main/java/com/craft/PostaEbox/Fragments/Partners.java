@@ -59,7 +59,6 @@ public class Partners extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
 
-        Toast.makeText(getActivity(), "Response" + App.getInstance().SessionId.toString(), Toast.LENGTH_LONG).show();
         //Intiate XML fetching
         AsyncCallWS task = new AsyncCallWS();
         task.execute();

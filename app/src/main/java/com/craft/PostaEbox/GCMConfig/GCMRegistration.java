@@ -38,9 +38,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
+
 
 public class GCMRegistration extends Activity {
     ProgressDialog prgDialog;
@@ -49,13 +47,15 @@ public class GCMRegistration extends Activity {
     Context applicationContext;
     String regId = "";
     String TAG = "GCMRegistration_Class Response";
+    SoapPrimitive resultString;
  
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
  
     AsyncTask<Void, Void, String> createRegIdTask;
  
     public static final String REG_ID = "regId";
-    public static final String EMAIL_ID = "eMailId";
+    public static final String KEY_GET_SESSION_KEY = "GetSessionKey";
+    public static final String SESSION_KEY = "SessionKey";
     public static final String PHONE_NUMBER = "mobile";
     
     String possibleEmail,userphone,name,customerid,account;
@@ -317,13 +317,33 @@ public class GCMRegistration extends Activity {
             HttpTransportSE transport = new HttpTransportSE(URL);
 
             transport.call(SOAP_ACTION, soapEnvelope);
-            App.getInstance().SessionId = (SoapPrimitive) soapEnvelope.getResponse();
+            resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
+            setSessionKey(resultString);
             Log.i(TAG, "response: " + App.getInstance().SessionId);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }
     }
 
+    public void setSessionKey (SoapPrimitive soapPrimitive){
+        XMLParser parser = new XMLParser();
+        String xml = soapPrimitive.toString(); // getting XML
+        Document doc = parser.getDomElement(xml); // getting DOM element
 
-}
+        NodeList nl = doc.getElementsByTagName(KEY_GET_SESSION_KEY);
+        // looping through all item nodes <item>
+
+        for (int i = 0; i < nl.getLength(); i++) {
+
+            Element e = (Element) nl.item(i);
+            // Setting the App Session Key
+           App.getInstance().SessionId = parser.getValue(e, SESSION_KEY);
+
+        }
+
+
+    }
+    }
+
+
