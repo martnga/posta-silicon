@@ -1,6 +1,8 @@
 package com.craft.PostaEbox.CustomActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +12,22 @@ import com.craft.PostaEbox.R;
 
 public class RootActivity extends AppCompatActivity {
     TextView Register,Signin;
+    String userphone;
+    public static final String PHONE_NUMBER = "mobile";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Getting phone number from shared prefences
+        SharedPreferences prefs = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        userphone = prefs.getString(PHONE_NUMBER, "");
+
+        //Take User to login page if not registered
+        if(!userphone.isEmpty()){
+            Intent i = new Intent(RootActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
         setContentView(R.layout.activity_root_activity);
         Register=(TextView) findViewById(R.id.signup);
         Signin=(TextView) findViewById(R.id.login);

@@ -1,6 +1,9 @@
 package com.craft.PostaEbox.CustomActivity;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     FrameLayout content_frame;
     DrawerAdapter mAdapter;
+    String userphone;
+    public static final String PHONE_NUMBER = "mobile";
+
     private ActionBarDrawerToggle mDrawerToggle;
     String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Settings","LogOut"};
     int [] DrawerIcons={R.drawable.home,R.drawable.box,R.drawable.billers,R.drawable.wallet,R.drawable.settings,R.drawable.logout};
@@ -32,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Getting phone number from shared prefences
+        SharedPreferences prefs = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        userphone = prefs.getString(PHONE_NUMBER, "");
+
+        //Take User to login page if not registered
+        if(userphone.isEmpty()){
+            Intent i = new Intent(MainActivity.this, RootActivity.class);
+            startActivity(i);
+        }
         setContentView(R.layout.activity_main);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
