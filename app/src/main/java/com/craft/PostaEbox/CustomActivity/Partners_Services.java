@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.craft.PostaEbox.App;
+import com.craft.PostaEbox.GCMConfig.GCMRegistration;
 import com.craft.PostaEbox.R;
 
 import org.ksoap2.SoapEnvelope;
@@ -106,7 +107,12 @@ public class Partners_Services extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            Toast.makeText(Partners_Services.this, "Response" + response.getName(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(Partners_Services.this, "Response" + response.getName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(Partners_Services.this, "Please wait. Transaction is being processed", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Partners_Services.this, GCMRegistration.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+            finish();
 
 
         }

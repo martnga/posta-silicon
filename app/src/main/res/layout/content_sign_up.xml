@@ -77,10 +77,10 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
+                    android:inputType="numberPassword"ga
                     android:layout_margin="5dp"
                     android:id="@+id/password"
-                    android:hint="Password" />
+                    android:hint="Enter Pin" />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout

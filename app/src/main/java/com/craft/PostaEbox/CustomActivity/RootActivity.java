@@ -24,10 +24,11 @@ public class RootActivity extends AppCompatActivity {
 
         //Take User to login page if not registered
         if(!userphone.isEmpty()){
-            Intent i = new Intent(RootActivity.this, MainActivity.class);
+            Intent i = new Intent(RootActivity.this, Login.class);
             startActivity(i);
             finish();
         }
+
         setContentView(R.layout.activity_root_activity);
         Register=(TextView) findViewById(R.id.signup);
         Signin=(TextView) findViewById(R.id.login);

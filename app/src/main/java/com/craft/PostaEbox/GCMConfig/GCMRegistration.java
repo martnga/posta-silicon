@@ -1,6 +1,7 @@
 package com.craft.PostaEbox.GCMConfig;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.accounts.Account;
@@ -18,7 +19,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.craft.PostaEbox.App;
+
 import com.craft.PostaEbox.CustomActivity.MainActivity;
 import com.craft.PostaEbox.R;
 import com.craft.PostaEbox.Utils.Utility;
@@ -54,16 +55,28 @@ public class GCMRegistration extends Activity {
     AsyncTask<Void, Void, String> createRegIdTask;
  
     public static final String REG_ID = "regId";
-    public static final String KEY_GET_SESSION_KEY = "GetSessionKey";
-    public static final String SESSION_KEY = "SessionKey";
     public static final String PHONE_NUMBER = "mobile";
-    
+    // XML node keys
+    static final String KEY_PARTNER = "Partner"; // parent node
+    static final String KEY_PARTNER_ID = "PartnerID";
+    static final String KEY_PARTNER_NAME = "PartnerName";
+    static final String KEY_ACCOUNT_QUERY = "AccountQuery";
+    public static ArrayList<HashMap<String, String>> partnersMenuItems  = new ArrayList<HashMap<String, String>>();
+
+
     String possibleEmail,userphone,name,customerid,account;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!partnersMenuItems.isEmpty()) {
+            Intent i = new Intent(GCMRegistration.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
         setContentView(R.layout.activity_gcm_registration);
+
         
        try{
         //possibleEmail += "************* Get Registered Gmail Account *************nn";
@@ -184,22 +197,29 @@ public class GCMRegistration extends Activity {
                     // response code '200'
                     @Override
                     public void onSuccess(String response) {
-                        // Hide Progress Dialog
-                        prgDialog.hide();
+                        /*// Hide Progress Dialog
+                        prgDialog.hide();*/
                         if (prgDialog != null) {
-                            prgDialog.dismiss();
 
-                            //Fetching Seesion Key
-                            AsyncCallWS task = new AsyncCallWS();
-                            task.execute();
+                            if (partnersMenuItems.isEmpty()) {
+                                //Fetching Partners
+                                AsyncCallWS task = new AsyncCallWS();
+                                task.execute();
+                            } else {
+                                //transition
+                                Intent intent = new Intent(GCMRegistration.this, MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+
+                            }
 
 
                         }
                     }
- 
+
                     // When the response returned by REST has Http
                     public void onFailure(int statusCode, Throwable error,
-                            String content) {
+                                          String content) {
                         prgDialog.hide();
                         if (prgDialog != null) {
                             prgDialog.dismiss();
@@ -217,7 +237,7 @@ public class GCMRegistration extends Activity {
                         }
                         // When Http response code other than 404, 500
                         else {
-                            Toast.makeText(applicationContext,"Unexpected Error occcured! [Most common Error: Device might "+ "not be connected to Internet or remote server is not up and running], check for other errors as well",
+                            Toast.makeText(applicationContext, "Unexpected Error occcured! [Most common Error: Device might " + "not be connected to Internet or remote server is not up and running], check for other errors as well",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
@@ -269,42 +289,68 @@ public class GCMRegistration extends Activity {
         checkPlayServices();
     }
 
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
+     //Fetching Partners
+     private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            Log.i(TAG, "onPreExecute");
-        }
+         @Override
+         protected void onPreExecute() {
+             Log.i(TAG, "onPreExecute");
+         }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            Log.i(TAG, "doInBackground");
-            fetchSessionID();
-            return null;
-        }
+         @Override
+         protected Void doInBackground(Void... params) {
+             Log.i(TAG, "doInBackground");
+             fetchPartners();
+             return null;
+         }
 
-        @Override
-        protected void onPostExecute(Void result) {
-            Log.i(TAG, "onPostExecute");
-            //Toast.makeText(GCMRegistration.this, "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+         @Override
+         protected void onPostExecute(Void result) {
+             Log.i(TAG, "onPostExecute");
+             // Toast.makeText(getActivity(), "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
+
+             XMLParser parser = new XMLParser();
+             String xml = resultString.toString(); // getting XML
+             Document doc = parser.getDomElement(xml); // getting DOM element
+
+             NodeList nl = doc.getElementsByTagName(KEY_PARTNER);
+             // looping through all item nodes <item>
+
+             for (int i = 0; i < nl.getLength(); i++) {
+
+                 // creating add items to HashMap
+                 HashMap<String, String> map = new HashMap<String, String>();
+                 Element e = (Element) nl.item(i);
+                 // adding each child node to HashMap key => value
+                 map.put(KEY_PARTNER_ID, parser.getValue(e, KEY_PARTNER_ID));
+                 map.put(KEY_PARTNER_NAME, parser.getValue(e, KEY_PARTNER_NAME));
+                 // map.put(KEY_ACCOUNT_QUERY, parser.getValue(e, KEY_ACCOUNT_QUERY));
+
+                 // adding HashList to ArrayList
+                 partnersMenuItems.add(map);
+             }
 
 
-            String xml = App.getInstance().SessionId.toString(); // getting XML
-            //transition
-            Intent intent = new Intent(GCMRegistration.this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+             //transition
+             Intent intent = new Intent(GCMRegistration.this, MainActivity.class);
+             startActivity(intent);
+             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
 
-        }
+             // Hide Progress Dialog
+             prgDialog.hide();
+             prgDialog.dismiss();
 
-    }
+
+         }
+
+     }
 
 
-    public void fetchSessionID() {
-        String SOAP_ACTION = "http://tempuri.org/GetDefaultSessionKey";
-        String METHOD_NAME = "GetDefaultSessionKey";
+    public void fetchPartners() {
+        String SOAP_ACTION = "http://tempuri.org/GetListOfPartners";
+        String METHOD_NAME = "GetListOfPartners";
         String NAMESPACE = "http://tempuri.org/";
-        String URL = "http://196.43.248.10:8250/Eposta/Service.asmx?op=GetDefaultSessionKey";
+        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=GetListOfPartners";
 
         try {
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -319,30 +365,10 @@ public class GCMRegistration extends Activity {
             transport.call(SOAP_ACTION, soapEnvelope);
             resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
-            setSessionKey(resultString);
-            Log.i(TAG, "response: " + App.getInstance().SessionId);
+            Log.i(TAG, "response: " + resultString);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }
-    }
-
-    public void setSessionKey (SoapPrimitive soapPrimitive){
-        XMLParser parser = new XMLParser();
-        String xml = soapPrimitive.toString(); // getting XML
-        Document doc = parser.getDomElement(xml); // getting DOM element
-
-        NodeList nl = doc.getElementsByTagName(KEY_GET_SESSION_KEY);
-        // looping through all item nodes <item>
-
-        for (int i = 0; i < nl.getLength(); i++) {
-
-            Element e = (Element) nl.item(i);
-            // Setting the App Session Key
-           App.getInstance().SessionId = parser.getValue(e, SESSION_KEY);
-
-        }
-
-
     }
     }
 

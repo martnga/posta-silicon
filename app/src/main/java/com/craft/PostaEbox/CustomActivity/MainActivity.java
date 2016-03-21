@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.Fragments.Home;
 import com.craft.PostaEbox.Fragments.Providers;
 import com.craft.PostaEbox.Fragments.eBox;
@@ -49,13 +50,8 @@ public class MainActivity extends AppCompatActivity {
     SoapPrimitive resultString;
     String TAG = "MainActivity_Class Response";
 
-    public static ArrayList<HashMap<String, String>> partnersMenuItems;
-    // XML node keys
-    static final String KEY_PARTNER = "Partner"; // parent node
-    static final String KEY_PARTNER_ID = "PartnerID";
-    static final String KEY_PARTNER_NAME = "PartnerName";
-    static final String KEY_ACCOUNT_QUERY = "AccountQuery";
-
+    public static final String KEY_GET_SESSION_KEY = "GetSessionKey";
+    public static final String SESSION_KEY = "SessionKey";
 
     private ActionBarDrawerToggle mDrawerToggle;
     String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Settings","LogOut"};
@@ -94,11 +90,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        partnersMenuItems = new ArrayList<HashMap<String, String>>();
+
         //Fetching Partners
         //Intiate XML fetching
-        AsyncCallWS task = new AsyncCallWS();
-        task.execute();
+        if(App.getInstance().SessionId.isEmpty()) {
+            AsyncCallWS task = new AsyncCallWS();
+            task.execute();
+        }
 
     }
 
@@ -181,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -193,47 +189,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Log.i(TAG, "doInBackground");
-            fetchPartners();
+            fetchSessionID();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            // Toast.makeText(getActivity(), "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
-
-            XMLParser parser = new XMLParser();
-            String xml = resultString.toString(); // getting XML
-            Document doc = parser.getDomElement(xml); // getting DOM element
-
-            NodeList nl = doc.getElementsByTagName(KEY_PARTNER);
-            // looping through all item nodes <item>
-
-            for (int i = 0; i < nl.getLength(); i++) {
-
-                // creating add items to HashMap
-                HashMap<String, String> map = new HashMap<String, String>();
-                Element e = (Element) nl.item(i);
-                // adding each child node to HashMap key => value
-                map.put(KEY_PARTNER_ID, parser.getValue(e, KEY_PARTNER_ID));
-                map.put(KEY_PARTNER_NAME, parser.getValue(e, KEY_PARTNER_NAME));
-                // map.put(KEY_ACCOUNT_QUERY, parser.getValue(e, KEY_ACCOUNT_QUERY));
-
-                // adding HashList to ArrayList
-                partnersMenuItems.add(map);
-            }
-
+            //Toast.makeText(GCMRegistration.this, "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
 
         }
 
     }
 
-
-    public void fetchPartners() {
-        String SOAP_ACTION = "http://tempuri.org/GetListOfPartners";
-        String METHOD_NAME = "GetListOfPartners";
+    public void fetchSessionID() {
+        String SOAP_ACTION = "http://tempuri.org/GetDefaultSessionKey";
+        String METHOD_NAME = "GetDefaultSessionKey";
         String NAMESPACE = "http://tempuri.org/";
-        String URL = "http://196.43.248.10:8250/EPosta/Service.asmx?op=GetListOfPartners";
+        String URL = "http://196.43.248.10:8250/Eposta/Service.asmx?op=GetDefaultSessionKey";
 
         try {
             SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -248,10 +221,30 @@ public class MainActivity extends AppCompatActivity {
             transport.call(SOAP_ACTION, soapEnvelope);
             resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
-            Log.i(TAG, "response: " + resultString);
+            setSessionKey(resultString);
+            Log.i(TAG, "response: " + App.getInstance().SessionId);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }
+    }
+
+    public void setSessionKey (SoapPrimitive soapPrimitive){
+        XMLParser parser = new XMLParser();
+        String xml = soapPrimitive.toString(); // getting XML
+        Document doc = parser.getDomElement(xml); // getting DOM element
+
+        NodeList nl = doc.getElementsByTagName(KEY_GET_SESSION_KEY);
+        // looping through all item nodes <item>
+
+        for (int i = 0; i < nl.getLength(); i++) {
+
+            Element e = (Element) nl.item(i);
+            // Setting the App Session Key
+            App.getInstance().SessionId = parser.getValue(e, SESSION_KEY);
+
+        }
+
+
     }
 
 }

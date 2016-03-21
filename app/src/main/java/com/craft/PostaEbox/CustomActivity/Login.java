@@ -25,9 +25,8 @@ import org.ksoap2.transport.HttpTransportSE;
 public class Login extends AppCompatActivity {
 
     TextView Login;
-    EditText mPassword,mPhoneNumber;
+    EditText mPassword;
     String TAG = "Login_Class Response";
-    String phoneNumber;
     String password;
     SoapPrimitive resultString;
 
@@ -36,23 +35,26 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Login=(TextView) findViewById(R.id.Login);
-        mPhoneNumber =(EditText) findViewById(R.id.phone_number);
         mPassword=(EditText) findViewById(R.id.password);
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPhoneNumber.getText().toString().isEmpty()){
-                    mPhoneNumber.setError("Email required");
-                }
-                else if(mPassword.getText().toString().isEmpty()){
+                if(mPassword.getText().toString().isEmpty()){
                     mPassword.setError("Password required");
                 }
                 else {
 
-                    phoneNumber = mPhoneNumber.getText().toString();
                     password = mPassword.getText().toString();
-                    AsyncCallWS task = new AsyncCallWS();
-                    task.execute();
+
+
+                    Toast.makeText(Login.this, "Successful Login. ", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Login.this, GCMRegistration.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    finish();
+
+                    /*AsyncCallWS task = new AsyncCallWS();
+                    task.execute();*/
 
                     /*Intent intent = new Intent(Login.this, MainActivity.class);
                     startActivity(intent);
@@ -89,7 +91,6 @@ public class Login extends AppCompatActivity {
 
             //User going to GcM registration
             Intent intent = new Intent(Login.this, GCMRegistration.class);
-            savingPhoneNumber(phoneNumber);
             startActivity(intent);
             finish();
         }
@@ -134,7 +135,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void savingPhoneNumber(String string){
+    public void savingToSharedPreferences(String string){
         //saving credentials in shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();

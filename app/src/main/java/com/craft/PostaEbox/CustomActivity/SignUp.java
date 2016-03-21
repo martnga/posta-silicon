@@ -55,6 +55,7 @@ public class SignUp extends AppCompatActivity {
         final EditText mPassword = (EditText) findViewById(R.id.password);
         final TextView mSignUp = (TextView) findViewById(R.id.signup_btn);
 
+
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,13 +70,31 @@ public class SignUp extends AppCompatActivity {
                     postalAddress = mPostalAddress.getText().toString().trim();
                     password = mPassword.getText().toString().trim();
 
+                    //saving credentials in shared preferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", 0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", email);
+                    editor.putString("mobile", mobileNumber);
+                   // editor.putString("customerID", App.getInstance().customerId.toString());
+                    editor.putString("customerID", "1105274436");
+                    editor.commit();
 
-                    AsyncCallWS task = new AsyncCallWS();
-                    task.execute();
+                    Toast.makeText(SignUp.this, "Successful Registration. ", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(SignUp.this, Login.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                    finish();
+
+                    /*AsyncCallWS task = new AsyncCallWS();
+                    task.execute();*/
 
                 }
             }
         });
+
+
+
+
     }
 
     private class AsyncCallWS extends AsyncTask<Void, Void, Void> {

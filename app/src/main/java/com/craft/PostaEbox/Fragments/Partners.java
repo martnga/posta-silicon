@@ -1,5 +1,6 @@
 package com.craft.PostaEbox.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.CustomActivity.MainActivity;
 import com.craft.PostaEbox.CustomActivity.Partners_Services;
+import com.craft.PostaEbox.GCMConfig.GCMRegistration;
 import com.craft.PostaEbox.Utils.ItemClickSupport;
 import com.craft.PostaEbox.Utils.PartnersDataAdapter;
 import com.craft.PostaEbox.R;
@@ -63,8 +65,8 @@ public class Partners extends Fragment {
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 // do it
                 Bundle b = new Bundle();
-                b.putString("title", MainActivity.partnersMenuItems.get(position).get(KEY_PARTNER_NAME));
-                b.putString("partnerID", MainActivity.partnersMenuItems.get(position).get(KEY_PARTNER_ID));
+                b.putString("title", GCMRegistration.partnersMenuItems.get(position).get(KEY_PARTNER_NAME));
+                b.putString("partnerID", GCMRegistration.partnersMenuItems.get(position).get(KEY_PARTNER_ID));
                 Intent i = new Intent(getActivity(), Partners_Services.class);
                 i.putExtras(b);
                 startActivity(i);
@@ -77,10 +79,10 @@ public class Partners extends Fragment {
     private ArrayList<PartnersModel> prepareData(){
 
         ArrayList<PartnersModel> partnersModelArrayList = new ArrayList<>();
-        for(int i=0;i<MainActivity.partnersMenuItems.size();i++){
+        for(int i=0;i<GCMRegistration.partnersMenuItems.size();i++){
             PartnersModel partnersModel = new PartnersModel();
 
-            partnersModel.setPartner_name(MainActivity.partnersMenuItems.get(i).get(KEY_PARTNER_NAME));
+            partnersModel.setPartner_name(GCMRegistration.partnersMenuItems.get(i).get(KEY_PARTNER_NAME));
             //partnersModel.setPartner_image_url(android_image_urls[i]);
             partnersModelArrayList .add(partnersModel);
         }
@@ -89,7 +91,32 @@ public class Partners extends Fragment {
 
 
 
+    /*public ArrayList<PartnersModel> launchRingDialog(View view) {
+        final ArrayList<PartnersModel> partnersModelArrayList = new ArrayList<>();
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(getActivity(), "", "Fetching Partners ...", true);
+        ringProgressDialog.setCancelable(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Here you should write your time consuming task...
+                    // Let the progress ring for 10 seconds...
+                    //Thread.sleep(10000);
+                    for(int i=0;i< GCMRegistration.partnersMenuItems.size();i++){
+                        PartnersModel partnersModel = new PartnersModel();
 
+                        partnersModel.setPartner_name(GCMRegistration.partnersMenuItems.get(i).get(KEY_PARTNER_NAME));
+                        //partnersModel.setPartner_image_url(android_image_urls[i]);
+                        partnersModelArrayList .add(partnersModel);
+                    }
+                } catch (Exception e) {
+                }
+                ringProgressDialog.dismiss();
+            }
+        }).start();
+        return partnersModelArrayList;
+    }
+*/
 
 
 }
