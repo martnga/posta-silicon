@@ -21,6 +21,7 @@ import android.widget.ListView;
 
 import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.Fragments.Home;
+import com.craft.PostaEbox.Fragments.Profile;
 import com.craft.PostaEbox.Fragments.Providers;
 import com.craft.PostaEbox.Fragments.eBox;
 import com.craft.PostaEbox.R;
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String SESSION_KEY = "SessionKey";
 
     private ActionBarDrawerToggle mDrawerToggle;
-    String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Settings","LogOut"};
-    int [] DrawerIcons={R.drawable.home,R.drawable.box,R.drawable.billers,R.drawable.wallet,R.drawable.settings,R.drawable.logout};
+    String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Profile","Settings","LogOut"};
+    int [] DrawerIcons={R.drawable.home,R.drawable.box,R.drawable.billers,R.drawable.wallet,R.drawable.ic_account_circle_black_48dp,R.drawable.settings,R.drawable.logout};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 this.finish();
                 break;
+            case 4:
+                fragment = new Profile();
+
         }
         if(fragment!=null) {
             FragmentManager fragmentManager = getSupportFragmentManager();

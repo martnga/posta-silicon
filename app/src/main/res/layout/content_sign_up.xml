@@ -77,7 +77,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberPassword"ga
+                    android:inputType="numberPassword"
                     android:layout_margin="5dp"
                     android:id="@+id/password"
                     android:hint="Enter Pin" />
