@@ -1,35 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".Fragments.Providers">
+                tools:context=".Fragments.Profile">
 
-    <ListView
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ProvidersList"
-        android:clickable="false"
-        android:listSelector="@android:color/transparent"
-        ></ListView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
+        card_view:cardElevation="4dp"
+        card_view:cardBackgroundColor="#FFFFFF"
+        card_view:cardCornerRadius="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/SuggestProvider"
-            android:text="Suggest A Provider"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="7dp"
-            android:textSize="18dp"
-            android:paddingTop="7dp"/>
-    </LinearLayout>
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:textColorHint="@color/hintcolor">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:inputType="numberSigned"
+                    android:id="@+id/meter_number_tx"
+                    android:hint="Meter Number" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/subscribe_btn"
+                        android:text="Subscribe"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/button"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="20dp"
+                        android:paddingTop="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
