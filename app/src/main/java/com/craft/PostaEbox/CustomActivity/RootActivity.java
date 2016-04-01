@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.R;
+import com.craft.PostaEbox.sqliteStorage.DatabaseOperations;
 
 public class RootActivity extends AppCompatActivity {
     TextView Register,Signin;
     String userphone;
     public static final String PHONE_NUMBER = "mobile";
+    //Create database
+    public static DatabaseOperations DB = new DatabaseOperations(App.getInstance());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

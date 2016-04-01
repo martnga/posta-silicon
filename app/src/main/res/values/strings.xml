@@ -13,4 +13,6 @@
     <string name="store_files_txt">Store and send your files securely</string>
     <string name="four_one_one_txt">411</string>
     <string name="select_provider">Select Provider</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
 </resources>
