@@ -1,12 +1,14 @@
 package com.craft.PostaEbox.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -87,8 +89,18 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View v) {
                 AccountID = mAccountNumberID.getText().toString().trim();
-                RootActivity.DB.saveInfo(RootActivity.DB, 0,partnerIDlist[spinnerValue], partnerNamelist[spinnerValue], AccountID);
 
+                if(AccountID.length() > 5 && spinnerValue != 0) {
+                    RootActivity.DB.saveInfo(RootActivity.DB, 0, partnerIDlist[spinnerValue], partnerNamelist[spinnerValue], AccountID);
+                    mAccountNumberID.setText("");
+                    mPartnersSpinner.setSelection(0);
+                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    Toast.makeText(getActivity(), "Subscription Sent",Toast.LENGTH_LONG).show();
+
+                }else{
+                    mAccountNumberID.setError("Invalid Account");
+                }
             }
         });
 

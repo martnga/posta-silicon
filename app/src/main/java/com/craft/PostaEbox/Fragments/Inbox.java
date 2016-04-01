@@ -18,14 +18,23 @@ import android.widget.Toast;
 import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.CustomActivity.RootActivity;
 import com.craft.PostaEbox.R;
+import com.craft.PostaEbox.Utils.XMLParser;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +48,7 @@ public class Inbox extends Fragment {
     ArrayList<String> partNerID = new ArrayList<>();
     ArrayList<String> accountNumber = new ArrayList<>();
     SoapPrimitive response;
+    String message, status;
     public String TAG = "InboxClass";
     int _ID;
 
@@ -123,7 +133,13 @@ public class Inbox extends Fragment {
             //Toast.makeText(getActivity(), "Response " + response, Toast.LENGTH_LONG).show();
 
             final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setMessage("" + response);
+            alertDialogBuilder.setTitle("Inbox Response");
+
+            if (status.equals("SUCCESS")){
+                alertDialogBuilder.setMessage(message);
+            }else if(status.equals("FAIL")){
+                alertDialogBuilder.setMessage("You don't have any mail in your inbox");
+            }
 
             alertDialogBuilder.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                 @Override
@@ -158,11 +174,37 @@ public class Inbox extends Fragment {
             HttpTransportSE transport = new HttpTransportSE(URL);
 
             transport.call(SOAP_ACTION, soapEnvelope);
-            response = (SoapPrimitive) soapEnvelope.getResponse();
-
+            response = (SoapPrimitive) soapEnvelope.getResponse()  ;
+             setStatusAndMessage(response);
             Log.i(TAG, "ValidateAccountID response: " + response);
         } catch (Exception ex) {
             Log.e(TAG, "Error: " + ex.getMessage());
         }
     }
-}
+
+
+    public void setStatusAndMessage (SoapPrimitive soapPrimitive){
+        XMLParser parser = new XMLParser();
+        String xml = soapPrimitive.toString(); // getting XML
+        Document doc = parser.getDomElement(xml); // getting DOM element
+
+        NodeList nl = doc.getElementsByTagName("ValidateAccountID");
+        // looping through all item nodes <item>
+
+        for (int i = 0; i < nl.getLength(); i++) {
+
+            Element e = (Element) nl.item(i);
+            // Saving Strings
+            status = parser.getValue(e, "Status");
+            message = parser.getValue(e, "Message");
+
+            Log.d("EEEEEEEEEEEEE", status + "  " + message);
+
+        }
+
+
+    }
+    }
+
+
+
