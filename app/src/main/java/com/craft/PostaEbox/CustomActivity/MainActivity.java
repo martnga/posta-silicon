@@ -48,11 +48,9 @@ public class MainActivity extends AppCompatActivity {
     DrawerAdapter mAdapter;
     String userphone;
     public static final String PHONE_NUMBER = "mobile";
-    SoapPrimitive resultString;
+
     String TAG = "MainActivity_Class Response";
 
-    public static final String KEY_GET_SESSION_KEY = "GetSessionKey";
-    public static final String SESSION_KEY = "SessionKey";
 
     private ActionBarDrawerToggle mDrawerToggle;
     String[] DrawerMenu = {"Home", "eBox", "Providers","Wallet","Profile","Settings","LogOut"};
@@ -92,12 +90,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //Fetching Partners
-        //Intiate XML fetching
-        if(App.getInstance().SessionId.isEmpty()) {
-            AsyncCallWS task = new AsyncCallWS();
-            task.execute();
-        }
+
 
     }
 
@@ -183,72 +176,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class AsyncCallWS extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            Log.i(TAG, "onPreExecute");
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Log.i(TAG, "doInBackground");
-            fetchSessionID();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Log.i(TAG, "onPostExecute");
-            //Toast.makeText(GCMRegistration.this, "Response" + resultString.toString(), Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
-    public void fetchSessionID() {
-        String SOAP_ACTION = "http://tempuri.org/GetDefaultSessionKey";
-        String METHOD_NAME = "GetDefaultSessionKey";
-        String NAMESPACE = "http://tempuri.org/";
-        String URL = "http://196.43.248.10:8250/Eposta/Service.asmx?op=GetDefaultSessionKey";
-
-        try {
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-            Request.addProperty("TypeOfPartner", "utility");
-
-            SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            soapEnvelope.dotNet = true;
-            soapEnvelope.setOutputSoapObject(Request);
-
-            HttpTransportSE transport = new HttpTransportSE(URL);
-
-            transport.call(SOAP_ACTION, soapEnvelope);
-            resultString = (SoapPrimitive) soapEnvelope.getResponse();
-
-            setSessionKey(resultString);
-            Log.i(TAG, "response: " + App.getInstance().SessionId);
-        } catch (Exception ex) {
-            Log.e(TAG, "Error: " + ex.getMessage());
-        }
-    }
-
-    public void setSessionKey (SoapPrimitive soapPrimitive){
-        XMLParser parser = new XMLParser();
-        String xml = soapPrimitive.toString(); // getting XML
-        Document doc = parser.getDomElement(xml); // getting DOM element
-
-        NodeList nl = doc.getElementsByTagName(KEY_GET_SESSION_KEY);
-        // looping through all item nodes <item>
-
-        for (int i = 0; i < nl.getLength(); i++) {
-
-            Element e = (Element) nl.item(i);
-            // Setting the App Session Key
-            App.getInstance().SessionId = parser.getValue(e, SESSION_KEY);
-
-        }
 
 
-    }
 
 }

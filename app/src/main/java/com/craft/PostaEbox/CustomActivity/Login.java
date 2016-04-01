@@ -15,12 +15,16 @@ import android.widget.Toast;
 import com.craft.PostaEbox.App;
 import com.craft.PostaEbox.GCMConfig.GCMRegistration;
 import com.craft.PostaEbox.R;
+import com.craft.PostaEbox.Utils.XMLParser;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class Login extends AppCompatActivity {
 
@@ -29,6 +33,8 @@ public class Login extends AppCompatActivity {
     String TAG = "Login_Class Response";
     String password;
     SoapPrimitive resultString;
+    public static final String KEY_GET_SESSION_KEY = "GetSessionKey";
+    public static final String SESSION_KEY = "SessionKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,14 @@ public class Login extends AppCompatActivity {
                     startActivity(intent);
                     overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
                     finish();
+
+                    //Fetching Session ID
+                    //Intiate XML fetching
+                    if(App.getInstance().SessionId.isEmpty()) {
+                        AsyncCallWS task = new AsyncCallWS();
+                        task.execute();
+                    }
+
 
                     /*AsyncCallWS task = new AsyncCallWS();
                     task.execute();*/
@@ -80,14 +94,14 @@ public class Login extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Log.i(TAG, "doInBackground");
-            login();
+            //login();
+            fetchSessionID();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute");
-            Toast.makeText(Login.this, "Response" + App.getInstance().customerId.toString(), Toast.LENGTH_LONG).show();
 
             //User going to GcM registration
             Intent intent = new Intent(Login.this, GCMRegistration.class);
@@ -142,6 +156,51 @@ public class Login extends AppCompatActivity {
         editor.putString("mobile", string);
         editor.putString("customerID", App.getInstance().customerId.toString());
         editor.commit();
+    }
+
+    public void fetchSessionID() {
+        String SOAP_ACTION = "http://tempuri.org/GetDefaultSessionKey";
+        String METHOD_NAME = "GetDefaultSessionKey";
+        String NAMESPACE = "http://tempuri.org/";
+        String URL = "http://196.43.248.10:8250/Eposta/Service.asmx?op=GetDefaultSessionKey";
+
+        try {
+            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+            Request.addProperty("TypeOfPartner", "utility");
+
+            SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            soapEnvelope.dotNet = true;
+            soapEnvelope.setOutputSoapObject(Request);
+
+            HttpTransportSE transport = new HttpTransportSE(URL);
+
+            transport.call(SOAP_ACTION, soapEnvelope);
+            resultString = (SoapPrimitive) soapEnvelope.getResponse();
+
+            setSessionKey(resultString);
+            Log.i(TAG, "response: " + App.getInstance().SessionId);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error: " + ex.getMessage());
+        }
+    }
+
+    public void setSessionKey (SoapPrimitive soapPrimitive){
+        XMLParser parser = new XMLParser();
+        String xml = soapPrimitive.toString(); // getting XML
+        Document doc = parser.getDomElement(xml); // getting DOM element
+
+        NodeList nl = doc.getElementsByTagName(KEY_GET_SESSION_KEY);
+        // looping through all item nodes <item>
+
+        for (int i = 0; i < nl.getLength(); i++) {
+
+            Element e = (Element) nl.item(i);
+            // Setting the App Session Key
+            App.getInstance().SessionId = parser.getValue(e, SESSION_KEY);
+
+        }
+
+
     }
 
     }

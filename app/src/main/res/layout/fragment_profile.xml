@@ -19,12 +19,26 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/partners_spinner"
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="MaterialBetterSpinner"
-                app:met_floatingLabel="normal" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:textColorHint="@color/hintcolor">
+                <Spinner
+                    android:id="@+id/partners_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    android:hint="Meter Number"
+                    android:prompt="@string/select_provider"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -37,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:inputType="numberSigned"
-                    android:id="@+id/meter_number_tx"
+                    android:id="@+id/account_number_txt"
                     android:hint="Meter Number" />
             </android.support.design.widget.TextInputLayout>
 
